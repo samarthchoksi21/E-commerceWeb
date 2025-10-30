@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.buy-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.buy-box {
+    background-color: #e6f8ed;
+    /* very light green */
+    border: 2px solid #34c759;
+    /* green border */
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.checkmark {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.buy-box h2 {
+    color: #34c759;
+    margin-bottom: 15px;
+}
+
+.buy-box p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.back-btn {
+    display: inline-block;
+    background-color: #34c759;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #28a745;
+}

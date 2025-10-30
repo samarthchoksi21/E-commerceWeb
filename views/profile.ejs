@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCart - Profile</title>
+    <link rel="stylesheet" href="/CSS/profile.css">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">E-Shop</div>
+        <nav class="nav-links">
+            <a href="/web">Home</a>
+            <a href="/profile">Profile</a>
+            <a href="/cart">Cart</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="profile-page">
+        <div class="profile-card">
+            <h2>Profile</h2>
+            <div class="profile-info">
+                <p><strong>Username:</strong>
+                    <%= username %>
+                </p>
+                <p><strong>Email:</strong>
+                    <%= email %>
+                </p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

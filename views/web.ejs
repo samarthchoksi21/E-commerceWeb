@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ClickCart — Shop</title>
+    <link rel="stylesheet" href="/CSS/web.css">
+</head>
+
+<body>
+    <div class="page">
+        <!-- NAVBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="logo">ClickCart</div>
+                <img src="/PRODUCTS/images/ClickCart.png" alt="Logo" class="logo-img">
+            </div>
+            <div class="topbar-center">
+                <div class="search-wrap">
+                    <input id="searchInput" placeholder="Search brand-name..." />
+                    <button id="searchBtn">Search</button>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="nav-btn" id="homeBtn">Home</button>
+                <button class="nav-btn" id="cartBtn">Cart</button>
+                <button class="nav-btn" id="profileBtn">Profile</button>
+                <button class="nav-btn" id="logoutbtn">logout</button>
+            </div>
+        </header>
+
+        <div class="main">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <h3>Categories</h3>
+                <div class="category-list">
+                    <button class="cat-pill active" data-cat="All">All</button>
+                    <button class="cat-pill" data-cat="Samsung">Samsung</button>
+                    <button class="cat-pill" data-cat="Apple">Apple</button>
+                    <button class="cat-pill" data-cat="Vivo">Vivo</button>
+                    <button class="cat-pill" data-cat="Oppo">Oppo</button>
+                    <button class="cat-pill" data-cat="Iqoo">iQOO</button>
+                    <button class="cat-pill" data-cat="Xiomi">Xiomi</button>
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <section class="content">
+                <div id="productGrid" class="product-grid"></div>
+
+                <div class="controls">
+                    <button id="loadMoreBtn" class="load-more-btn">Load More</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productGrid = document.getElementById('productGrid');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const profileBtn = document.getElementById('profileBtn');
+            const logoutbtn = document.getElementById('logoutbtn');
+            const cartBtn = document.getElementById('cartBtn');
+            const homeBtn = document.getElementById('homeBtn');
+
+            let currentPage = 1;
+            const limit = 5;
+            let activeCategory = 'All';
+            let loading = false;
+
+            async function loadProducts(page = 1, append = true) {
+                if (loading) return;
+                loading = true;
+                loadMoreBtn.disabled = true;
+
+                try {
+                    let url = `/product?page=${page}&limit=${limit}`;
+                    if (activeCategory !== 'All') url += `&category=${encodeURIComponent(activeCategory)}`;
+                    if (searchInput.value.trim()) url += `&search=${encodeURIComponent(searchInput.value.trim())}`;
+                    console.log('Fetching URL:', url);
+
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    console.log('Fetched data:', data);
+
+                    const products = data.products || [];
+
+                    if (!append) productGrid.innerHTML = '';
+
+                    products.forEach(p => productGrid.appendChild(createProductCard(p)));
+
+                    loadMoreBtn.style.display = data.hasMore ? 'inline-block' : 'none';
+                } catch (err) {
+                    console.error('Load products error', err);
+                } finally {
+                    loading = false;
+                    loadMoreBtn.disabled = false;
+                }
+            }
+
+            function createProductCard(p) {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const imgSrc = p.image && p.image.startsWith('/') ? p.image : '/' + p.image;
+
+                card.innerHTML = `
+                    <div class="thumb-wrap">
+                        <img class="thumb" src="${imgSrc}" alt="${escapeHtml(p.name)}" />
+                    </div>
+                    <div class="meta">
+                        <h4 class="pname">${escapeHtml(p.name)}</h4>
+                        <div class="price">₹${Number(p.price).toLocaleString()}</div>
+                        <div class="actions">
+                            <button class="btn add-cart">Add to Cart</button>
+                            <button class="btn buy-now">Buy Now</button>
+                        </div>
+                    </div>
+                    <div class="desc">${escapeHtml(p.description)}</div>
+                `;
+
+                card.querySelector('.thumb').addEventListener('click', () => card.classList.toggle('open-desc'));
+
+                // --- FIXED --- real backend call for Add to Cart
+                card.querySelector('.add-cart').addEventListener('click', async() => {
+                    try {
+                        const res = await fetch(`/cart/add/${p._id}`, {
+                            method: 'GET',
+                            credentials: 'include'
+                        });
+
+                        if (res.ok) {
+                            alert('Added to cart!');
+                        } else if (res.status === 401) {
+                            window.location.href = '/login';
+                        } else {
+                            alert('Error adding to cart.');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Network error');
+                    }
+                });
+
+                // --- Buy Now ---
+                card.querySelector('.buy-now').addEventListener('click', async() => {
+                    window.location.href = `/buy/${p._id}`;
+                });
+
+                return card;
+            }
+
+            function escapeHtml(s) {
+                return String(s || '').replace(/[&<>"']/g, c => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[c]));
+            }
+
+            // --- Category click logic ---
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeCategory = btn.dataset.cat;
+                    currentPage = 1;
+                    loadProducts(currentPage, false);
+                });
+            });
+
+            // --- Search logic ---
+            searchBtn.addEventListener('click', () => {
+                activeCategory = 'All';
+                document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+                document.querySelector('.cat-pill[data-cat="All"]').classList.add('active');
+                currentPage = 1;
+                loadProducts(currentPage, false);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchBtn.click();
+                }
+            });
+
+            // --- Nav buttons ---
+            profileBtn.addEventListener('click', () => window.location.href = '/profile');
+            logoutbtn.addEventListener('click', () => window.location.href = '/logout');
+            cartBtn.addEventListener('click', () => window.location.href = '/cart');
+            homeBtn.addEventListener('click', () => {
+                currentPage = 1;
+                activeCategory = 'All';
+                document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+                document.querySelector('.cat-pill[data-cat="All"]').classList.add('active');
+                loadProducts(currentPage, false);
+            });
+
+            loadMoreBtn.addEventListener('click', () => {
+                currentPage++;
+                loadProducts(currentPage, true);
+            });
+
+            loadProducts(currentPage, true);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6f61;
+    padding: 15px 30px;
+}
+
+.navbar .logo {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffdede;
+}
+
+.profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.profile-card {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    max-width: 400px;
+    width: 100%;
+}
+
+.profile-card h2 {
+    margin-bottom: 20px;
+    color: #ff6f61;
+    text-align: center;
+}
+
+.profile-info p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}

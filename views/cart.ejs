@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCart - Cart</title>
+    <link rel="stylesheet" href="/CSS/cart.css">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">E-Shop</div>
+        <nav class="nav-links">
+            <a href="/web">Home</a>
+            <a href="/profile">Profile</a>
+            <a href="/cart">Cart</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="cart-page">
+        <% if (cartItems && cartItems.length > 0) { %>
+            <div class="cart-items">
+                <% cartItems.forEach(item => { %>
+                    <div class="cart-item">
+                        <img src="<%= item.product.image %>" alt="<%= item.product.name %>">
+                        <div class="item-info">
+                            <h3>
+                                <%= item.product.name %>
+                            </h3>
+                            <p>
+                                <%= item.product.description %>
+                            </p>
+                            <div class="price-qty">
+                                <span class="price">₹<%= item.product.price.toLocaleString() %></span>
+                                <span class="qty">Qty: <%= item.qty %></span>
+                            </div>
+                            <form action="/cart/remove/<%= item.product._id %>" method="POST" class="remove-form">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <div class="cart-summary">
+                <h3>Total Price: ₹
+                    <%= totalPrice.toLocaleString() %>
+                </h3>
+                <form action="/buy" method="get">
+                    <button type="submit" class="buy-now-btn">Buy Now</button>
+                </form>
+            </div>
+            <% } else { %>
+                <div class="empty-cart">
+                    <img src="/PRODUCTS/images/empty-cart.png" alt="Empty Cart">
+                    <h3>Your cart is empty</h3>
+                    <a href="/web" class="back-btn">Continue Shopping</a>
+                </div>
+                <% } %>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ClickCart</title>
+    <link rel="stylesheet" href="/CSS/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-box">
+            <img src="/PRODUCTS/images/ClickCart.png" alt="" class="logo-img">
+            <h1 class="brand">ClickCart</h1>
+            <h2>Welcome Back 👋</h2>
+            <p class="subtitle">Login to continue your shopping</p>
+            <div class="error-message" id="errorMessage"></div>
+            <form action="/login" method="POST" id="loginform">
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit">Login</button>
+
+                <p class="signup-link">Don’t have an account? <a href="/signup">Create one</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        const loginform = document.getElementById("loginform");
+        const errordiv = document.getElementById("errorMessage");
+
+        // Remove error on input
+        loginform.addEventListener('input', () => {
+            errordiv.classList.remove("show");
+        });
+
+        loginform.addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const formdata = new FormData(loginform);
+            const data = {
+                email: formdata.get('email'),
+                password: formdata.get('password')
+            };
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+
+                    errordiv.textContent = result.ERROR || result.message;
+                    errordiv.classList.add("show");
+                } else {
+                    window.location.href = result.redirect;
+                }
+
+            } catch (error) {
+                errordiv.textContent = "SOMETHING WENT WRONG, TRY AGAIN";
+                errordiv.classList.add("show");
+            }
+        });
+    </script>
+</body>
+
+</html>
