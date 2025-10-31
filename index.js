@@ -1,7 +1,7 @@
 const { MongoConnection } = require('./connection')
 const { RestrictLoggedUser } = require('./middleware/auth')
 const express = require('express')
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT
 const cookie_parser = require('cookie-parser')
 const app = express()
 app.use(cookie_parser())
@@ -20,5 +20,8 @@ app.use("/PRODUCTS/images", express.static("PRODUCTS/images"));
 
 app.use('/', UserRoute)
 app.get("/", (req, res) => {
-    res.redirect("/signup")
+    res.send("Backend is live and running on Render!")
+})
+app.listen(PORT, () => {
+    console.log("SERVER STARTED..!!")
 })
