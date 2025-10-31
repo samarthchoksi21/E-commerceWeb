@@ -115,7 +115,6 @@ async function AddToCart(req, res) {
         } else {
 
             user.cart.push({ productId: product._id, qty: 1 });
-            console.log("Added new item with Qty: 1");
         }
 
         await user.save();
