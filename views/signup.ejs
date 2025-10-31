@@ -65,11 +65,11 @@
                 const result = await res.json();
 
                 if (!res.ok) {
-                    // show error
+
                     errorDiv.textContent = result.ERROR || result.message;
                     errorDiv.style.color = 'red';
                 } else {
-                    // redirect on success
+
                     window.location.href = result.redirect;
                 }
             } catch (err) {

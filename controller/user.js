@@ -64,7 +64,6 @@ async function LoginCheck(req, res) {
     res.status(200).json({ status: true, redirect: "/web" })
 
 }
-// Controller: ProductsFrontend
 async function ProductsFrontend(req, res) {
     try {
         const page = parseInt(req.query.page) || 1;
