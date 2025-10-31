@@ -19,7 +19,7 @@ app.use("/PRODUCTS/images", express.static("PRODUCTS/images"));
 
 app.use('/', UserRoute)
 app.get("/", (req, res) => {
-    res.send("Backend is live and running on Render!")
+    res.redirect('/signup')
 })
 app.listen(8000, () => {
     console.log("SERVER STARTED..!!")
