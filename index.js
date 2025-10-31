@@ -1,7 +1,7 @@
 const { MongoConnection } = require('./connection')
 const { RestrictLoggedUser } = require('./middleware/auth')
 const express = require('express')
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8000
 const cookie_parser = require('cookie-parser')
 const app = express()
 app.use(cookie_parser())
