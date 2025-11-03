@@ -161,6 +161,14 @@ products = [{
         category: "Vivo",
         image: "PRODUCTS/images/x200fe.png",
         stock: 40
+    },
+    {
+        name: "Redmi note 14 pro",
+        description: "Redmi Note 14 Pro 5G Phantom Purple 8GB RAM 256GB Storage|50 MP Sony Camera Setup|Corning Gorilla Glass Victus 2 | 1.5K 3D Curved AMOLED | Mediatek Dimensity 7300- Ultra",
+        price: 24000,
+        category: "Xiomi",
+        image: "PRODUCTS/images/Redmi14s.png",
+        stock: 40
     }
 
 
