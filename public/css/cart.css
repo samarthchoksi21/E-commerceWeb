@@ -27,6 +27,7 @@ header.topbar {
 .topbar-left .logo {
     font-size: 1.6rem;
     font-weight: 700;
+    color: #1e7e34;
 }
 
 .topbar-right {
