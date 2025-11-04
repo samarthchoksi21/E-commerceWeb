@@ -128,12 +128,19 @@ async function AddToCart(req, res) {
 async function RenderCart(req, res) {
     try {
         const user = await USER.findById(req.User._id).populate('cart.productId');
-        const cartItems = user.cart.map(c => ({
-            product: c.productId,
-            qty: c.qty || 1
-        }));
 
-        const totalPrice = cartItems.reduce((sum, item) => sum + (item.product.price * item.qty), 0);
+
+        const cartItems = user.cart
+            .filter(c => c.productId)
+            .map(c => ({
+                product: c.productId,
+                qty: c.qty || 1
+            }));
+
+        const totalPrice = cartItems.reduce(
+            (sum, item) => sum + (item.product.price * item.qty),
+            0
+        );
 
         res.render('cart', { cartItems, totalPrice });
     } catch (err) {
@@ -141,7 +148,6 @@ async function RenderCart(req, res) {
         res.status(500).send('Error loading cart');
     }
 }
-
 
 
 
