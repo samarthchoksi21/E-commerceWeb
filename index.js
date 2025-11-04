@@ -3,7 +3,6 @@ const { RestrictLoggedUser } = require('./middleware/auth')
 const express = require('express')
 const cookie_parser = require('cookie-parser')
 const app = express()
-const PORT = process.env.PORT
 app.use(cookie_parser())
 const path = require('path')
 const UserRoute = require('./routes/user')
@@ -22,6 +21,6 @@ app.use('/', UserRoute)
 app.get("/", (req, res) => {
     res.redirect('/signup')
 })
-app.listen(PORT, () => {
+app.listen(8000, () => {
     console.log("SERVER STARTED..!!")
 })
