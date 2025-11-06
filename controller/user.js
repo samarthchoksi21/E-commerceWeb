@@ -176,7 +176,7 @@ async function RenderBuyPage(req, res) {
 
 async function CartRemover(req, res) {
     try {
-        const user = await USER.findById(req.User._id); // req.User is set by RestrictLoggedUser
+        const user = await USER.findById(req.User._id);
         if (!user) return res.redirect('/login');
 
         user.cart = user.cart.filter(item => !item.productId.equals(req.params.id));
